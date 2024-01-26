@@ -79,6 +79,8 @@ jobs:
         run: |
           foreach($file in (Get-ChildItem "${{ env.NuGetDirectory }}" -Recurse -Include *.nupkg)) {
               echo $file
+              echo "test"
               echo "${{ secrets.NUGET_APIKEY }}"
+              echo "${{ env.NuGetDirectory }}/*nupkg"
               dotnet nuget push $file --api-key "${{ secrets.NUGET_APIKEY }}" --source https://api.nuget.org/v3/index.json --skip-duplicate
           }
