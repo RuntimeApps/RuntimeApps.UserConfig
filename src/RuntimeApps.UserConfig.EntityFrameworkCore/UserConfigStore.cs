@@ -26,7 +26,7 @@ namespace RuntimeApps.UserConfig.EntityFrameworkCore {
 
         protected virtual Task<DbUserConfigModel?> FindAsync(string key, string? userId, CancellationToken cancellationToken = default) =>
             UserConfigs
-                .Where(uc => uc.Key.Equals(uc.Key, StringComparison.OrdinalIgnoreCase) && uc.UserId == userId)
+                .Where(uc => uc.Key == key && uc.UserId == userId)
                 .FirstOrDefaultAsync(cancellationToken);
 
         public virtual async Task ResetAsync(string key, string? userId = default, CancellationToken cancellationToken = default) {
