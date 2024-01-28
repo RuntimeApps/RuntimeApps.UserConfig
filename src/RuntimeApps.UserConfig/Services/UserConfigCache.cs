@@ -25,7 +25,7 @@ namespace RuntimeApps.UserConfig.Services {
             return Task.FromResult<UserConfigModel<TValue>?>(default);
         }
 
-        public virtual virtual Task RemoveAsync(string key, string? userId) {
+        public virtual Task RemoveAsync(string key, string? userId) {
             if(!_option.Value.UseCache)
                 return Task.CompletedTask;
 
