@@ -15,7 +15,7 @@ namespace RuntimeApps.UserConfig.Services {
                 throw new NullReferenceException(nameof(memoryCache));
         }
 
-        public Task<UserConfigModel<TValue>?> GetAsync<TValue>(string key, string? userId) {
+        public virtual Task<UserConfigModel<TValue>?> GetAsync<TValue>(string key, string? userId) {
             if(!_option.Value.UseCache)
                 return Task.FromResult<UserConfigModel<TValue>?>(default);
 
@@ -25,7 +25,7 @@ namespace RuntimeApps.UserConfig.Services {
             return Task.FromResult<UserConfigModel<TValue>?>(default);
         }
 
-        public Task RemoveAsync(string key, string? userId) {
+        public virtual virtual Task RemoveAsync(string key, string? userId) {
             if(!_option.Value.UseCache)
                 return Task.CompletedTask;
 
@@ -34,7 +34,7 @@ namespace RuntimeApps.UserConfig.Services {
             return Task.CompletedTask;
         }
 
-        public Task SetAsync<TValue>(UserConfigModel<TValue> model) {
+        public virtual Task SetAsync<TValue>(UserConfigModel<TValue> model) {
             if(!_option.Value.UseCache)
                 return Task.CompletedTask;
 

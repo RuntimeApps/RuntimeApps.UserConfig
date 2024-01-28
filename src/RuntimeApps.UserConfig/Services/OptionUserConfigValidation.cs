@@ -6,7 +6,7 @@ namespace RuntimeApps.UserConfig.Services {
 
         public OptionUserConfigValidation(IOptions<UserConfigOption> option) => _option = option;
 
-        public Task<bool> ValidateKeyAsync(string key, ActionType actionType, string? userId = null, CancellationToken cancellationToken = default) {
+        public virtual Task<bool> ValidateKeyAsync(string key, ActionType actionType, string? userId = null, CancellationToken cancellationToken = default) {
             if(!_option.Value.ValidateKey)
                 return Task.FromResult(true);
 
@@ -26,7 +26,7 @@ namespace RuntimeApps.UserConfig.Services {
             return Task.FromResult(false);
         }
 
-        public Task<bool> ValidateValueAsync<T>(UserConfigModel<T> inputModel, CancellationToken cancellationToken) =>
+        public virtual Task<bool> ValidateValueAsync<T>(UserConfigModel<T> inputModel, CancellationToken cancellationToken) =>
             Task.FromResult(true);
     }
 }

@@ -1,10 +1,10 @@
 ﻿namespace RuntimeApps.UserConfig {
     public class UserConfigOption {
-        public bool ValidateKey { get; set; } = true;
-        public IList<string> ValidKeys { get; set; } = [];
-        public IList<string> ValidDefaultKeus { get; set; } = [];
-        public IList<string> ValidReadonlyKeys { get; set; } = [];
-        public bool UseCache { get; set; } = false;
-        public string CachePrefix { get; set; } = "UserConfigs";
+        public virtual bool ValidateKey { get; set; } = true;
+        public virtual IList<string> ValidKeys { get; set; } = [];
+        public virtual IList<string> ValidDefaultKeus { get; set; } = [];
+        public virtual IList<string> ValidReadonlyKeys { get; set; } = [];
+        public virtual bool UseCache { get; set; } = false;
+        public virtual string CachePrefix { get; set; } = "UserConfigs";
     }
 }
