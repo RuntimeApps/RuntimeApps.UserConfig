@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Caching.Memory;
+﻿using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Moq;
-using RuntimeApps.UserConfig.Models;
 using RuntimeApps.UserConfig.Services;
 
 namespace RuntimeApps.UserConfig.Test {
@@ -136,8 +130,8 @@ namespace RuntimeApps.UserConfig.Test {
             await cache.SetAsync(cachedValue);
 
             // Assert
-            memoryCacheMock.Verify(c => c.CreateEntry(It.Is<string>(k=>k == "CachePrefix_someKey_userId")), Times.Once);
-            cachEntryMock.VerifySet(v=>v.Value = cachedValue);
+            memoryCacheMock.Verify(c => c.CreateEntry(It.Is<string>(k => k == "CachePrefix_someKey_userId")), Times.Once);
+            cachEntryMock.VerifySet(v => v.Value = cachedValue);
         }
 
         [Fact]

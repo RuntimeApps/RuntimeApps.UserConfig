@@ -1,4 +1,4 @@
-﻿namespace RuntimeApps.UserConfig.Models {
+﻿namespace RuntimeApps.UserConfig {
     public enum ActionType {
         Get = 1,
         Set = 2,

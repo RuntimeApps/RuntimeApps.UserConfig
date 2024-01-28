@@ -1,6 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using RuntimeApps.UserConfig.Interfaces;
-using RuntimeApps.UserConfig.Models;
 
 namespace RuntimeApps.UserConfig.EntityFrameworkCore {
     public class UserConfigStore<TContext>: IUserConfigStore where TContext : DbContext {

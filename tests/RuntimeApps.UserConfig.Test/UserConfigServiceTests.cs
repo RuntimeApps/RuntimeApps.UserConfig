@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Moq;
-using RuntimeApps.UserConfig.Interfaces;
-using RuntimeApps.UserConfig.Models;
+﻿using Moq;
 using RuntimeApps.UserConfig.Services;
 
 namespace RuntimeApps.UserConfig.Test {
@@ -21,13 +14,13 @@ namespace RuntimeApps.UserConfig.Test {
             var cacheMock = new Mock<IUserConfigCache>();
             cacheMock.Setup(c => c.GetAsync<string>(userConfigModel.Key, userConfigModel.UserId))
                 .ReturnsAsync(userConfigModel);
-            var keyValidationMock = new Mock<IKeyValidation>();
-            keyValidationMock.Setup(kv => kv.Validate(userConfigModel.Key, ActionType.Get, userConfigModel.UserId, It.IsAny<CancellationToken>()))
+            var userConfigValidationMock = new Mock<IUserConfigValidation>();
+            userConfigValidationMock.Setup(kv => kv.ValidateKeyAsync(userConfigModel.Key, ActionType.Get, userConfigModel.UserId, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(true);
 
             var service = new UserConfigService(
                 Mock.Of<IUserConfigStore>(),
-                keyValidationMock.Object,
+                userConfigValidationMock.Object,
                 cacheMock.Object
             );
 
@@ -36,7 +29,7 @@ namespace RuntimeApps.UserConfig.Test {
 
             // Assert
             Assert.Equal(userConfigModel.Value, result);
-            keyValidationMock.Verify(kv => kv.Validate(userConfigModel.Key, ActionType.Get, userConfigModel.UserId, It.IsAny<CancellationToken>()), Times.Once);
+            userConfigValidationMock.Verify(kv => kv.ValidateKeyAsync(userConfigModel.Key, ActionType.Get, userConfigModel.UserId, It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Fact]
@@ -50,14 +43,14 @@ namespace RuntimeApps.UserConfig.Test {
             var storeMock = new Mock<IUserConfigStore>();
             storeMock.Setup(s => s.GetAsync<string>(userConfigModel.Key, userConfigModel.UserId, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(userConfigModel);
-            var keyValidationMock = new Mock<IKeyValidation>();
-            keyValidationMock.Setup(kv => kv.Validate(userConfigModel.Key, ActionType.Get, userConfigModel.UserId, It.IsAny<CancellationToken>()))
+            var userConfigValidationMock = new Mock<IUserConfigValidation>();
+            userConfigValidationMock.Setup(kv => kv.ValidateKeyAsync(userConfigModel.Key, ActionType.Get, userConfigModel.UserId, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(true);
 
             var cacheMock = new Mock<IUserConfigCache>();
             var service = new UserConfigService(
                 storeMock.Object,
-                keyValidationMock.Object,
+                userConfigValidationMock.Object,
                 cacheMock.Object
             );
 
@@ -73,13 +66,13 @@ namespace RuntimeApps.UserConfig.Test {
         public async Task GetAsync_WithInvalidKey_ThrowsKeyNotFoundException() {
             // Arrange
             var key = "invalidKey";
-            var keyValidationMock = new Mock<IKeyValidation>();
-            keyValidationMock.Setup(kv => kv.Validate(key, ActionType.Get, It.IsAny<string?>(), It.IsAny<CancellationToken>()))
+            var userConfigValidationMock = new Mock<IUserConfigValidation>();
+            userConfigValidationMock.Setup(kv => kv.ValidateKeyAsync(key, ActionType.Get, It.IsAny<string?>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(false);
 
             var service = new UserConfigService(
                 Mock.Of<IUserConfigStore>(),
-                keyValidationMock.Object,
+                userConfigValidationMock.Object,
                 Mock.Of<IUserConfigCache>()
             );
 
@@ -94,13 +87,13 @@ namespace RuntimeApps.UserConfig.Test {
             var userId = "userId";
             var storeMock = new Mock<IUserConfigStore>();
             var cacheMock = new Mock<IUserConfigCache>();
-            var keyValidationMock = new Mock<IKeyValidation>();
-            keyValidationMock.Setup(kv => kv.Validate(key, ActionType.Reset, userId, It.IsAny<CancellationToken>()))
+            var userConfigValidationMock = new Mock<IUserConfigValidation>();
+            userConfigValidationMock.Setup(kv => kv.ValidateKeyAsync(key, ActionType.Reset, userId, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(true);
 
             var service = new UserConfigService(
                 storeMock.Object,
-                keyValidationMock.Object,
+                userConfigValidationMock.Object,
                 cacheMock.Object
             );
 
@@ -122,13 +115,15 @@ namespace RuntimeApps.UserConfig.Test {
             };
             var storeMock = new Mock<IUserConfigStore>();
             var cacheMock = new Mock<IUserConfigCache>();
-            var keyValidationMock = new Mock<IKeyValidation>();
-            keyValidationMock.Setup(kv => kv.Validate(config.Key, ActionType.Set, config.UserId, It.IsAny<CancellationToken>()))
+            var userConfigValidationMock = new Mock<IUserConfigValidation>();
+            userConfigValidationMock.Setup(kv => kv.ValidateKeyAsync(config.Key, ActionType.Set, config.UserId, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(true);
-            
+            userConfigValidationMock.Setup(v => v.ValidateValueAsync<string>(config, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(true);
+
             var service = new UserConfigService(
                 storeMock.Object,
-                keyValidationMock.Object,
+                userConfigValidationMock.Object,
                 cacheMock.Object
             );
 
@@ -138,6 +133,39 @@ namespace RuntimeApps.UserConfig.Test {
             // Assert
             storeMock.Verify(s => s.SetAsync(config, It.IsAny<CancellationToken>()), Times.Once);
             cacheMock.Verify(c => c.RemoveAsync(config.Key, config.UserId), Times.Once);
+            userConfigValidationMock.Verify(v => v.ValidateKeyAsync(config.Key, ActionType.Set, config.UserId, It.IsAny<CancellationToken>()), Times.Once);
+            userConfigValidationMock.Verify(v => v.ValidateValueAsync<string>(config, It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task SetAsync_WithInvalidValueConfig_ThrowFormatException() {
+            // Arrange
+            var config = new UserConfigModel<string>() {
+                Key = "validKey",
+                UserId = "userId",
+                Value = "value",
+            };
+            var storeMock = new Mock<IUserConfigStore>();
+            var cacheMock = new Mock<IUserConfigCache>();
+            var userConfigValidationMock = new Mock<IUserConfigValidation>();
+            userConfigValidationMock.Setup(kv => kv.ValidateKeyAsync(config.Key, ActionType.Set, config.UserId, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(true);
+            userConfigValidationMock.Setup(v => v.ValidateValueAsync<string>(config, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(false);
+
+            var service = new UserConfigService(
+                storeMock.Object,
+                userConfigValidationMock.Object,
+                cacheMock.Object
+            );
+
+            // Act
+            await Assert.ThrowsAsync<FormatException>(() => service.SetAsync(config));
+
+            // Assert
+            storeMock.Verify(s => s.SetAsync(It.IsAny<UserConfigModel<string>>(), It.IsAny<CancellationToken>()), Times.Never);
+            cacheMock.Verify(c => c.RemoveAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            userConfigValidationMock.Verify(v => v.ValidateValueAsync<string>(config, It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Fact]
@@ -145,7 +173,7 @@ namespace RuntimeApps.UserConfig.Test {
             // Arrange
             var service = new UserConfigService(
                 Mock.Of<IUserConfigStore>(),
-                Mock.Of<IKeyValidation>(),
+                Mock.Of<IUserConfigValidation>(),
                 Mock.Of<IUserConfigCache>()
             );
 

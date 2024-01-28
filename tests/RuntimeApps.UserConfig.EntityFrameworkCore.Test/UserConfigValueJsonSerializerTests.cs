@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
-using RuntimeApps.UserConfig.Models;
-
-namespace RuntimeApps.UserConfig.EntityFrameworkCore.Test {
+﻿namespace RuntimeApps.UserConfig.EntityFrameworkCore.Test {
     public class UserConfigValueJsonSerializerTests {
         [Fact]
         public async Task SerializeAsync_WithValidValue_ReturnsSerializedString() {

@@ -1,6 +1,4 @@
-﻿using RuntimeApps.UserConfig.Models;
-
-namespace RuntimeApps.UserConfig.Interfaces {
+﻿namespace RuntimeApps.UserConfig {
     public interface IUserConfigStore {
         Task<UserConfigModel<TConfig>?> GetAsync<TConfig>(string key, string? user = default, CancellationToken cancellationToken = default);
 

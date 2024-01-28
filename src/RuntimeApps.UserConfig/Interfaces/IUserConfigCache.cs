@@ -1,6 +1,4 @@
-﻿using RuntimeApps.UserConfig.Models;
-
-namespace RuntimeApps.UserConfig.Interfaces {
+﻿namespace RuntimeApps.UserConfig {
     public interface IUserConfigCache {
         Task<UserConfigModel<TValue>?> GetAsync<TValue>(string key, string? userId = null);
         Task SetAsync<TValue>(UserConfigModel<TValue> model);

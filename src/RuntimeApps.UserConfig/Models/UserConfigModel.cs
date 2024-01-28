@@ -1,4 +1,4 @@
-﻿namespace RuntimeApps.UserConfig.Models {
+﻿namespace RuntimeApps.UserConfig {
     public class UserConfigModel<TValue> {
         public string Key { get; set; } = default!;
         public string? UserId { get; set; }

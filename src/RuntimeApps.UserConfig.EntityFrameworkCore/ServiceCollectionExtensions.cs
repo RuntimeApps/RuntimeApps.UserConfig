@@ -1,9 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using RuntimeApps.UserConfig.Extensions;
-using RuntimeApps.UserConfig.Interfaces;
-using RuntimeApps.UserConfig.Models;
 
 namespace RuntimeApps.UserConfig.EntityFrameworkCore {
     public static class ServiceCollectionExtensions {

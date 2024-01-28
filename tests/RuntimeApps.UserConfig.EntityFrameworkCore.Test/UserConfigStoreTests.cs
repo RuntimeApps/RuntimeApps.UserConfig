@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Moq;
-using RuntimeApps.UserConfig.Models;
 
 namespace RuntimeApps.UserConfig.EntityFrameworkCore.Test {
     public class UserConfigStoreTests {
-        
+
         [Fact]
         public async Task GetAsync_WithValidKeyAndUserId_ReturnsUserConfigModel() {
             // Arrange

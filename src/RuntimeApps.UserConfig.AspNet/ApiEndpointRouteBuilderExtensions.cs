@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
-using RuntimeApps.UserConfig.Interfaces;
 
 namespace RuntimeApps.UserConfig.AspNet {
     public static class ApiEndpointRouteBuilderExtensions {
@@ -19,7 +18,7 @@ namespace RuntimeApps.UserConfig.AspNet {
 
             routeGroup.MapPost("/{key}", async (string key, [FromBody] object body, HttpContext httpContext, IUserConfigService userConfigService, CancellationToken cancellationToken) => {
                 var userId = httpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-                await userConfigService.SetAsync(new Models.UserConfigModel<object> {
+                await userConfigService.SetAsync(new UserConfigModel<object> {
                     Key = key,
                     Value = body,
                     UserId = userId
@@ -43,7 +42,7 @@ namespace RuntimeApps.UserConfig.AspNet {
             });
 
             routeGroup.MapPost("/{key}", async (string key, [FromBody] object body, IUserConfigService userConfigService, CancellationToken cancellationToken) => {
-                await userConfigService.SetAsync(new Models.UserConfigModel<object> {
+                await userConfigService.SetAsync(new UserConfigModel<object> {
                     Key = key,
                     Value = body,
                 }, cancellationToken);

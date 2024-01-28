@@ -1,8 +1,6 @@
 ﻿using System.Text;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
-using RuntimeApps.UserConfig.Interfaces;
-using RuntimeApps.UserConfig.Models;
 
 namespace RuntimeApps.UserConfig.Services {
     public class UserConfigCache: IUserConfigCache {

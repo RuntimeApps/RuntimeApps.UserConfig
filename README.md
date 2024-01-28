@@ -23,7 +23,7 @@ This package has an implementation of APIs for user configs. It should be added 
 If you want to change the behavier of this package, you can reimplment this interfaces and added to DI:
 
 * **IUserConfigService**: The main implementation of user configs
-* **IKeyValidation**: Validate key
+* **IUserConfigValidation**: Validate key and value of input models. Implement if you need cosutom validations.
 * **IUserConfigCache**: Cashe the user configs in memory
 * **IUserConfigStore**: Store of user config
 * **IUserConfigValueSerializer**: The value serializer

@@ -1,15 +1,12 @@
-﻿using RuntimeApps.UserConfig.Interfaces;
-using RuntimeApps.UserConfig.Models;
-
-namespace RuntimeApps.UserConfig.Services {
+﻿namespace RuntimeApps.UserConfig.Services {
     public class UserConfigService: IUserConfigService {
         private readonly IUserConfigStore _store;
-        private readonly IKeyValidation _keyValidation;
+        private readonly IUserConfigValidation _userConfigValidation;
         private readonly IUserConfigCache _cacheService;
 
-        public UserConfigService(IUserConfigStore store, IKeyValidation keyValidation, IUserConfigCache cacheService) {
+        public UserConfigService(IUserConfigStore store, IUserConfigValidation userConfigValidation, IUserConfigCache cacheService) {
             _store = store;
-            _keyValidation = keyValidation;
+            _userConfigValidation = userConfigValidation;
             _cacheService = cacheService;
         }
 
@@ -40,6 +37,10 @@ namespace RuntimeApps.UserConfig.Services {
 
         public virtual async Task SetAsync<TConfig>(UserConfigModel<TConfig> userConfig, CancellationToken cancellationToken = default) {
             await CheckKey(userConfig.Key, ActionType.Set, userConfig.UserId, cancellationToken);
+            var checkValue = await _userConfigValidation.ValidateValueAsync(userConfig, cancellationToken);
+            if(!checkValue)
+                throw new FormatException("Config value is not valid");
+
             await _store.SetAsync(userConfig, cancellationToken);
             await _cacheService.RemoveAsync(userConfig.Key, userConfig.UserId);
         }
@@ -48,7 +49,7 @@ namespace RuntimeApps.UserConfig.Services {
             if(string.IsNullOrEmpty(key))
                 throw new NullReferenceException(nameof(key));
 
-            var result = await _keyValidation.Validate(key, actionType, userId, cancellationToken);
+            var result = await _userConfigValidation.ValidateKeyAsync(key, actionType, userId, cancellationToken);
             if(!result)
                 throw new KeyNotFoundException(key);
         }
