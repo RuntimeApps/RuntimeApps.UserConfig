@@ -1,4 +1,6 @@
-﻿namespace RuntimeApps.UserConfig.Services {
+﻿using RuntimeApps.UserConfig.Exceptions;
+
+namespace RuntimeApps.UserConfig.Services {
     public class UserConfigService: IUserConfigService {
         private readonly IUserConfigStore _store;
         private readonly IUserConfigValidation _userConfigValidation;
@@ -39,7 +41,7 @@
             await CheckKey(userConfig.Key, ActionType.Set, userConfig.UserId, cancellationToken);
             var checkValue = await _userConfigValidation.ValidateValueAsync(userConfig, cancellationToken);
             if(!checkValue)
-                throw new FormatException("Config value is not valid");
+                throw new InvalidValueModelException(userConfig.Key, userConfig.Value);
 
             await _store.SetAsync(userConfig, cancellationToken);
             await _cacheService.RemoveAsync(userConfig.Key, userConfig.UserId);
@@ -51,7 +53,7 @@
 
             var result = await _userConfigValidation.ValidateKeyAsync(key, actionType, userId, cancellationToken);
             if(!result)
-                throw new KeyNotFoundException(key);
+                throw new InvalidConfigKeyException(key);
         }
 
         private async Task<UserConfigModel<TValue>?> GetDefaultConfig<TValue>(string key, CancellationToken cancellationToken = default) {
