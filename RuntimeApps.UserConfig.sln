@@ -13,7 +13,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RuntimeApps.UserConfig.Test
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RuntimeApps.UserConfig.EntityFrameworkCore.Test", "tests\RuntimeApps.UserConfig.EntityFrameworkCore.Test\RuntimeApps.UserConfig.EntityFrameworkCore.Test.csproj", "{7529A40B-F004-45DE-BBF4-74D836551051}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RuntimeApps.UserConfig.AspNet", "src\RuntimeApps.UserConfig.AspNet\RuntimeApps.UserConfig.AspNet.csproj", "{66CB1D8F-CF66-47B9-A2DB-9B80ECD8DC5A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RuntimeApps.UserConfig.AspNet", "src\RuntimeApps.UserConfig.AspNet\RuntimeApps.UserConfig.AspNet.csproj", "{66CB1D8F-CF66-47B9-A2DB-9B80ECD8DC5A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sample", "sample", "{8B9318F1-EA9E-4C4E-BE6D-AF5D1F2A3C4D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RuntimeApps.UserConfig.AspNetSample", "sample\RuntimeApps.UserConfig.AspNetSample\RuntimeApps.UserConfig.AspNetSample.csproj", "{B01A23BE-2930-4D0F-8936-3231D13FFC88}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +45,10 @@ Global
 		{66CB1D8F-CF66-47B9-A2DB-9B80ECD8DC5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{66CB1D8F-CF66-47B9-A2DB-9B80ECD8DC5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{66CB1D8F-CF66-47B9-A2DB-9B80ECD8DC5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B01A23BE-2930-4D0F-8936-3231D13FFC88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B01A23BE-2930-4D0F-8936-3231D13FFC88}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B01A23BE-2930-4D0F-8936-3231D13FFC88}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B01A23BE-2930-4D0F-8936-3231D13FFC88}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -48,6 +56,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{ECCB1E8C-9143-44EE-BCDC-30E5501343FB} = {F55B7685-FE5F-4B12-B100-9DA38D13675B}
 		{7529A40B-F004-45DE-BBF4-74D836551051} = {F55B7685-FE5F-4B12-B100-9DA38D13675B}
+		{B01A23BE-2930-4D0F-8936-3231D13FFC88} = {8B9318F1-EA9E-4C4E-BE6D-AF5D1F2A3C4D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C2B218BC-48EE-43C6-B8EB-1E902D389C75}
