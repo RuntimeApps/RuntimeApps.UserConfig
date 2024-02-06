@@ -24,7 +24,7 @@ If you want to change the behavier of this package, you can reimplment this inte
 
 * **IUserConfigService**: The main implementation of user configs
 * **IUserConfigValidation**: Validate key and value of input models. Implement if you need cosutom validations.
-* **IUserConfigCache**: Cashe the user configs in memory
+* **IUserConfigCache**: Cache the user configs in memory
 * **IUserConfigStore**: Store of user config
 * **IUserConfigValueSerializer**: The value serializer
 * **DbUserConfigEntityConfiguration**: Entity framework configuration for DbUserConfigModel
