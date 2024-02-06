@@ -19,9 +19,13 @@ namespace RuntimeApps.UserConfig.AspNet {
                     return TypedResults.Ok(result);
                 }
                 catch(InvalidConfigKeyException keyException) {
+                    if(throwKnownException)
+                        throw;
                     return KeyNotFoundProblem(keyException.Key);
                 }
                 catch(InvalidValueModelException) {
+                    if(throwKnownException)
+                        throw;
                     return InvalidValueroblem();
                 }
             });
@@ -31,8 +35,12 @@ namespace RuntimeApps.UserConfig.AspNet {
                     var result = await userConfigService.GetAsync<object>(key, null, cancellationToken);
                     return TypedResults.Ok(result);
                 } catch(InvalidConfigKeyException keyException) {
+                    if(throwKnownException)
+                        throw; 
                     return KeyNotFoundProblem(keyException.Key);
                 } catch(InvalidValueModelException) {
+                    if(throwKnownException)
+                        throw; 
                     return InvalidValueroblem();
                 }
             });
@@ -47,8 +55,12 @@ namespace RuntimeApps.UserConfig.AspNet {
                     }, cancellationToken);
                     return TypedResults.Ok();
                 } catch(InvalidConfigKeyException keyException) {
+                    if(throwKnownException)
+                        throw; 
                     return KeyNotFoundProblem(keyException.Key);
                 } catch(InvalidValueModelException) {
+                    if(throwKnownException)
+                        throw; 
                     return InvalidValueroblem();
                 }
             });
@@ -59,8 +71,12 @@ namespace RuntimeApps.UserConfig.AspNet {
                     await userConfigService.ResetAsync(key, userId!, cancellationToken);
                     return TypedResults.Ok();
                 } catch(InvalidConfigKeyException keyException) {
+                    if(throwKnownException)
+                        throw; 
                     return KeyNotFoundProblem(keyException.Key);
                 } catch(InvalidValueModelException) {
+                    if(throwKnownException)
+                        throw; 
                     return InvalidValueroblem();
                 }
             });
@@ -68,10 +84,10 @@ namespace RuntimeApps.UserConfig.AspNet {
             return endpoints;
         }
 
-        public static IEndpointRouteBuilder MapUserConfigAdminApi(this IEndpointRouteBuilder endpoints) {
+        public static IEndpointRouteBuilder MapUserConfigAdminApi(this IEndpointRouteBuilder endpoints, bool throwKnownException = false) {
             var routeGroup = endpoints.MapGroup("").RequireAuthorization();
 
-            routeGroup.MapPost("/{key}", async Task<Results<Ok, ValidationProblem>> (string key, [FromBody] object body, IUserConfigService userConfigService, CancellationToken cancellationToken) => {
+            routeGroup.MapPost("/{key}/default", async Task<Results<Ok, ValidationProblem>> (string key, [FromBody] object body, IUserConfigService userConfigService, CancellationToken cancellationToken) => {
                 try{
                     await userConfigService.SetAsync(new UserConfigModel<object> {
                         Key = key,
@@ -79,8 +95,12 @@ namespace RuntimeApps.UserConfig.AspNet {
                     }, cancellationToken);
                     return TypedResults.Ok();
                 } catch(InvalidConfigKeyException keyException) {
+                    if(throwKnownException)
+                        throw; 
                     return KeyNotFoundProblem(keyException.Key);
                 } catch(InvalidValueModelException) {
+                    if(throwKnownException)
+                        throw; 
                     return InvalidValueroblem();
                 }
             });

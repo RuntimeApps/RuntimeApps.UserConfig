@@ -123,7 +123,7 @@ app.MapGroup("api/account/setting")
     .WithTags("User settings")
     .MapUserConfigApi();
 
-app.MapGroup("api/user/setting")
+app.MapGroup("api/account/setting")
     .WithTags("User Admin settings")
     .RequireAuthorization(config => config.RequireRole("Admin"))
     .MapUserConfigAdminApi();
