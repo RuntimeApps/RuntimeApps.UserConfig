@@ -1,4 +1,5 @@
 ﻿using Moq;
+using RuntimeApps.UserConfig.Exceptions;
 using RuntimeApps.UserConfig.Services;
 
 namespace RuntimeApps.UserConfig.Test {
@@ -77,7 +78,7 @@ namespace RuntimeApps.UserConfig.Test {
             );
 
             // Act & Assert
-            await Assert.ThrowsAsync<KeyNotFoundException>(() => service.GetAsync<string>(key));
+            await Assert.ThrowsAsync<InvalidConfigKeyException>(() => service.GetAsync<string>(key));
         }
 
         [Fact]
@@ -160,7 +161,7 @@ namespace RuntimeApps.UserConfig.Test {
             );
 
             // Act
-            await Assert.ThrowsAsync<FormatException>(() => service.SetAsync(config));
+            await Assert.ThrowsAsync<InvalidValueModelException>(() => service.SetAsync(config));
 
             // Assert
             storeMock.Verify(s => s.SetAsync(It.IsAny<UserConfigModel<string>>(), It.IsAny<CancellationToken>()), Times.Never);
